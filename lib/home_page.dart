@@ -1,378 +1,141 @@
-import 'dart:math';
+import 'package:devtools_app/screens/data_preparing.dart';
+import 'package:devtools_app/screens/magic.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+import 'screens/drawing.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
   final String title;
   @override
-  // ignore: library_private_types_in_public_api
-  _MyHomePageState createState() => _MyHomePageState();
+  MyHomePageState createState() => MyHomePageState();
 }
 
-const Color green = Colors.green;
-const Color blue = Colors.blue;
-const Color violet = Colors.purple;
-const Color unknownColor = Colors.pink;
-Color bgColor = Colors.yellow.shade200;
-
-class _MyHomePageState extends State<MyHomePage> {
-  Widget get colorBox {
-    return Container(
-      height: 200,
-      width: 200,
-      key: const Key('Color Box '),
-      color: Color.alphaBlend(green.withOpacity(0.5), blue),
-    );
-  }
-
-  Widget get linearGradientBox {
-    return Container(
-      height: 200,
-      width: 200,
-      key: const Key('Linear Gradient Box '),
-      decoration: const BoxDecoration(
-          gradient: LinearGradient(
-        colors: [green, blue],
-        stops: [0, 0.7],
-        transform: GradientRotation(0),
-      )),
-    );
-  }
-
-  Widget get linearGradientExamples {
-    return Row(children: [
-      Container(
-        height: 200,
-        width: 200,
-        key: const Key('Unknown Colored Text Background'),
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                transform: const GradientRotation(pi / 2),
-                colors: [
-              Color.alphaBlend(unknownColor.withOpacity(0.6), bgColor),
-              bgColor,
-            ],
-                stops: [
-              0,
-              1
-            ])),
-        child: const Align(
-          alignment: Alignment.topCenter,
-          child: Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text(
-              'Пункт 1',
-              style: TextStyle(color: unknownColor),
-            ),
-          ),
-        ),
-      ),
-      const SizedBox(width: 20),
-      Container(
-        height: 200,
-        width: 200,
-        key: const Key('LinearGradient Rotated Repeated'),
-        decoration: const BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment(0, 0),
-                end: Alignment(0, 0.2),
-                colors: [unknownColor, Colors.transparent],
-                stops: [0.1, 0.1],
-                transform: GradientRotation(pi / 6),
-                tileMode: TileMode.repeated)),
-      ),
-      const SizedBox(width: 20),
-      shapeGradient,
-    ]);
-  }
-
-  Widget get shapeGradient {
-    return Container(
-      key: const Key('RadialGradient Example'),
-      height: 200,
-      width: 200,
-      decoration: const BoxDecoration(
-          backgroundBlendMode: BlendMode.darken,
-          gradient: RadialGradient(
-            colors: [unknownColor, Colors.transparent],
-            stops: [0.1, 0.1],
-            tileMode: TileMode.repeated,
-            focal: Alignment(-1, 0),
-            center: Alignment(0.2, 0),
-            transform: GradientRotation(10 * pi / 6),
-          )),
-    );
-  }
-
-  Widget get sweepGradientExample {
-    return Container(
-      key: const Key('Sweep Gradient Example'),
-      height: 200,
-      width: 200,
-      decoration: const BoxDecoration(
-          backgroundBlendMode: BlendMode.multiply,
-          gradient: SweepGradient(
-            colors: [unknownColor, Colors.transparent, unknownColor],
-            stops: [0.7, 0.7, 0.75],
-            transform: GradientRotation(0),
-            startAngle: -pi / 2,
-            endAngle: pi,
-          )),
-    );
-  }
-
-  Image get profileImg => Image.network(
-        'https://raw.githubusercontent.com/Sveta-K13/flutter_colors_demo/master/images/profile.png',
-        height: 80,
-      );
-  Image get profileImgColored => Image.network(
-        'https://raw.githubusercontent.com/Sveta-K13/flutter_colors_demo/master/images/profile.png',
-        height: 80,
-        color: Colors.deepPurple,
-      );
-  Image get meImg => Image.network(
-        'https://raw.githubusercontent.com/Sveta-K13/flutter_colors_demo/master/images/me.png',
-        height: 80,
-      );
-  Image get paintImg => Image.network(
-        'https://raw.githubusercontent.com/Sveta-K13/flutter_colors_demo/master/images/paint.png',
-        height: 80,
-      );
-  //
-
-  //
-
-  //
-
-  //
-
+class MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return PageView(children: [
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      Scaffold(
-        body: SafeArea(
-          child: Flex(
-            direction: Axis.vertical,
-            children: [
-              colorBox,
-              linearGradientBox,
-              linearGradientExamples,
-              sweepGradientExample,
-            ],
-          ),
-        ),
-      ),
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      Scaffold(
-          body: SafeArea(
-              child: Column(children: [
-        profileImg,
-        profileImgColored,
-        const SizedBox(height: 30),
-        buildShaderMask(),
-      ]))),
-
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      Container(
-        color: Colors.white,
-        child: Stack(
-          children: [
-            Align(
-              child: Container(
-                height: 200,
-                width: 200,
-                color: Colors.black,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(30),
-              child: Draggable(
-                childWhenDragging: Container(),
-                feedback: buildMagicText(),
-                child: buildMagicText(),
-              ),
-            ),
-          ],
-        ),
-      ),
+    return PageView(children: const [
+      Drawing(),
+      DataPreparing(),
+      Magic(),
     ]);
   }
 
-  Container buildMagicText() {
-    return Container(
-        key: const Key('text'),
-        foregroundDecoration: const BoxDecoration(
-            color: Colors.white, backgroundBlendMode: BlendMode.difference),
-        child: const Text('hi',
-            style: TextStyle(
-                color: Colors.white, decoration: TextDecoration.none)));
-  }
-
-  ShaderMask buildGradientText() {
-    return ShaderMask(
-      blendMode: BlendMode.srcIn,
-      shaderCallback: (bounds) => const LinearGradient(
-          colors: [Colors.indigo, Colors.red],
-          stops: [0.3, 0.7]).createShader(bounds),
-      child: const Text(
-        'I love Flutter',
-        style: TextStyle(fontSize: 65, fontWeight: FontWeight.bold),
-      ),
-    );
-  }
-
-  Draggable buildDraggableTransparentText() {
-    return Draggable(
-      childWhenDragging: const SizedBox(),
-      feedback: buildTransparentText(),
-      child: buildTransparentText(),
-    );
-  }
-
-  ShaderMask buildTransparentText() {
-    return ShaderMask(
-      blendMode: BlendMode.srcOut,
-      shaderCallback: (bounds) => const LinearGradient(
-          colors: [Colors.indigo, Colors.red],
-          stops: [0.3, 0.7]).createShader(bounds),
-      child: const Text(
-        'I love Flutter',
-        style: TextStyle(
-            fontSize: 65,
-            fontWeight: FontWeight.bold,
-            decoration: TextDecoration.none),
-      ),
-    );
-  }
-
-  // ShaderMask buildRichWidget() {
-  //   return ShaderMask(
-  //     blendMode: BlendMode.difference,
-  //     shaderCallback: (bounds) => const LinearGradient(
-  //         colors: [Colors.indigo, Colors.red],
-  //         stops: [0.3, 0.7]).createShader(bounds),
-  //     child: Container(
-  //       width: double.infinity,
-  //       key: const Key('Container with mask'),
-  //       decoration: const BoxDecoration(
-  //           backgroundBlendMode: BlendMode.clear, color: Colors.amber),
-  //       child: Stack(
-  //         alignment: AlignmentDirectional.topCenter,
-  //         children: [
-  //           Image.asset(
-  //             'images/paint.png',
-  //             width: 280,
-  //           ),
-  //           const Column(
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               Text('хорошего дня!'),
-  //               Text('  хорошего дня!'),
-  //               Text('хорошего дня!'),
-  //               Text('  хорошего дня!'),
-  //               Text('хорошего дня!'),
-  //               Text('  хорошего дня!'),
-  //               Text('хорошего дня!'),
-  //             ],
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  Container buildOutIcon() {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      decoration: const BoxDecoration(
-          gradient: LinearGradient(
-        colors: <Color>[
-          Colors.white,
-          Colors.black,
-        ],
-        stops: [0.3, 1],
-        tileMode: TileMode.clamp,
-      )),
-      child: ShaderMask(
-        shaderCallback: (Rect bounds) {
-          return const LinearGradient(
-            colors: <Color>[
-              blue,
-              green,
-            ],
-            stops: [0.3, 1],
-            tileMode: TileMode.clamp,
-          ).createShader(bounds);
-        },
-        blendMode: BlendMode.srcOut,
-        child: profileImgColored,
-      ),
-    );
-  }
-
-  ShaderMask buildShaderMask() {
-    return ShaderMask(
-      shaderCallback: (Rect bounds) {
-        return const LinearGradient(
-          colors: <Color>[green, blue],
-          tileMode: TileMode.mirror,
-        ).createShader(bounds);
-      },
-      blendMode: BlendMode.srcIn,
-      child: profileImgColored,
-    );
-  }
-}
-
-class InvertedClipper extends CustomClipper<Path> {
   @override
-  Path getClip(Size size) {
-    double rectSize = size.width / 2;
-    return Path.combine(
-      PathOperation.difference,
-      Path()..addRect(Rect.fromLTWH(0, 0, size.width, size.height)),
-      Path()
-        ..addRect(Rect.fromLTWH((size.width - rectSize) / 2,
-            (size.height - rectSize) / 2, rectSize, rectSize))
-        ..close(),
-    );
-  }
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    // Always add properties from the base class first.
+    super.debugFillProperties(properties);
 
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => true;
+    // properties.add(DoubleProperty(
+    //   'device pixel ratio',
+    //   devicePixelRatio,
+    //   tooltip: 'physical pixels per logical pixel',
+    // ));
+
+    // Omit the property name 'message' when displaying this String property
+    // // as it would just add visual noise.
+    // properties.add(StringProperty('message', message, showName: false));
+
+    // properties.add(DoubleProperty('stepWidth', stepWidth));
+
+    // // A scale of 1.0 does nothing so should be hidden.
+    // properties.add(DoubleProperty('scale', scale, defaultValue: 1.0));
+
+    // // If the hitTestExtent matches the paintExtent, it is just set to its
+    // // default value so is not relevant.
+    // properties.add(DoubleProperty('hitTestExtent', hitTestExtent, defaultValue: paintExtent));
+
+    // // maxWidth of double.infinity indicates the width is unconstrained and
+    // // so maxWidth has no impact.
+    // properties.add(DoubleProperty('maxWidth', maxWidth, defaultValue: double.infinity));
+
+    // Progress is a value between 0 and 1 or null. Showing it as a
+    // percentage makes the meaning clear enough that the name can be
+    // hidden.
+    // properties.add(PercentProperty(
+    //   'progress',
+    //   progress,
+    //   showName: false,
+    //   ifNull: '<indeterminate>',
+    // ));
+
+    // // Most text fields have maxLines set to 1.
+    // properties.add(IntProperty('maxLines', maxLines, defaultValue: 1));
+
+    // // Specify the unit as otherwise it would be unclear that time is in
+    // // milliseconds.
+    // properties.add(IntProperty('duration', duration.inMilliseconds, unit: 'ms'));
+
+    // Tooltip is used instead of unit for this case as a unit should be a
+    // terse description appropriate to display directly after a number
+    // without a space.
+
+    // // Displaying the depth value would be distracting. Instead only display
+    // // if the depth value is missing.
+    // properties.add(ObjectFlagProperty<int>('depth', depth, ifNull: 'no depth'));
+
+    // // bool flag that is only shown when the value is true.
+    // properties.add(FlagProperty('using primary controller', value: primary));
+
+    // properties.add(FlagProperty(
+    //   'isCurrent',
+    //   value: isCurrent,
+    //   ifTrue: 'active',
+    //   ifFalse: 'inactive',
+    // ));
+
+    // properties.add(DiagnosticsProperty<bool>('keepAlive', keepAlive));
+
+    // // FlagProperty could have also been used in this case.
+    // // This option results in the text "obscureText: true" instead
+    // // of "obscureText" which is a bit more verbose but a bit clearer.
+    // properties.add(DiagnosticsProperty<bool>('obscureText', obscureText, defaultValue: false));
+
+    // properties.add(EnumProperty<TextAlign>('textAlign', textAlign, defaultValue: null));
+    // properties.add(EnumProperty<ImageRepeat>('repeat', repeat, defaultValue: ImageRepeat.noRepeat));
+
+    // // Warn users when the widget is missing but do not show the value.
+    // properties.add(ObjectFlagProperty<Widget>('widget', widget, ifNull: 'no widget'));
+
+    // properties.add(IterableProperty<BoxShadow>(
+    //   'boxShadow',
+    //   boxShadow,
+    //   defaultValue: null,
+    //   style: style,
+    // ));
+
+    // // Getting the value of size throws an exception unless hasSize is true.
+    // properties.add(DiagnosticsProperty<Size>.lazy(
+    //   'size',
+    //   () => size,
+    //   description: '${ hasSize ? size : "MISSING" }',
+    // ));
+
+    // // If the `toString` method for the property value does not provide a
+    // // good terse description, write a DiagnosticsProperty subclass as in
+    // // the case of TransformProperty which displays a nice debugging view
+    // // of a Matrix4 that represents a transform.
+    // properties.add(TransformProperty('transform', transform));
+
+    // // If the value class has a good `toString` method, use
+    // // DiagnosticsProperty<YourValueType>. Specifying the value type ensures
+    // // that debugging tools always know the type of the field and so can
+    // // provide the right UI affordances. For example, in this case even
+    // // if color is null, a debugging tool still knows the value is a Color
+    // // and can display relevant color related UI.
+    // properties.add(DiagnosticsProperty<Color>('color', color));
+
+    // // Use a custom description to generate a more terse summary than the
+    // // `toString` method on the map class.
+    // properties.add(DiagnosticsProperty<Map<Listenable, VoidCallback>>(
+    //   'handles',
+    //   handles,
+    //   description: handles != null
+    //     ? '${handles!.length} active client${ handles!.length == 1 ? "" : "s" }'
+    //     : null,
+    //   ifNull: 'no notifications ever received',
+    //   showName: false,
+    // ));
+  }
 }
