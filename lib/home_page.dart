@@ -1,4 +1,4 @@
-import 'package:devtools_app/screens/data_preparing.dart';
+import 'package:devtools_app/screens/data_preparing/data_preparing.dart';
 import 'package:devtools_app/screens/magic.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

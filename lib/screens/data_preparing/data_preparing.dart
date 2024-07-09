@@ -1,5 +1,11 @@
+import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'models/pairs.dart';
+
+const _sharedPrefsKey = 'pairs_key';
 
 class DataPreparing extends StatefulWidget {
   const DataPreparing({super.key});
@@ -15,10 +21,41 @@ class _DataPreparingState extends State<DataPreparing> {
   @override
   void initState() {
     super.initState();
-    pairs = List.generate(
-      24,
-      (i) => _createPair(),
-    );
+    _setupPairs();
+  }
+
+  Future<void> _setupPairs() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final savedPairsData = prefs.getString(_sharedPrefsKey);
+    if (savedPairsData != null) {
+      final decoded = jsonDecode(savedPairsData) as List;
+      pairs = decoded
+          .map(
+            (i) => Pair.fromJson(
+                i as Map<String, dynamic>,
+                (jsonString) => (jsonDecode(jsonString as String) as List)
+                    .map((e) => e as int)
+                    .toList(growable: false)),
+          )
+          .toList(
+            growable: false,
+          );
+    } else {
+      pairs = List.generate(
+        24,
+        (i) => _createPair(),
+      );
+      prefs.setString(
+        _sharedPrefsKey,
+        jsonEncode(
+          pairs,
+          toEncodable: (obj) => (obj as Pair).toJson(
+            jsonEncode,
+          ),
+        ),
+      );
+    }
+    setState(() {});
   }
 
   @override
@@ -42,12 +79,9 @@ class _DataPreparingState extends State<DataPreparing> {
           itemCount: pairs.length,
           itemBuilder: (BuildContext ctx, index) {
             final pair = pairs[index];
-            final containsAll = useFirstVariant
-                ? pair.first.containsAll(pair.second)
-                : pair.first.containsAllV2(pair.second);
             return PairTile(
               pair: pair,
-              containsAll: containsAll,
+              useFirstVariant: useFirstVariant,
             );
           },
         ),
@@ -80,16 +114,19 @@ class _DataPreparingState extends State<DataPreparing> {
 
 class PairTile extends StatelessWidget {
   final Pair<List<int>> pair;
-  final bool containsAll;
+  final bool useFirstVariant;
 
   const PairTile({
     super.key,
     required this.pair,
-    required this.containsAll,
+    required this.useFirstVariant,
   });
 
   @override
   Widget build(BuildContext context) {
+    final containsAll = useFirstVariant
+        ? pair.first.containsAll(pair.second)
+        : pair.first.containsAllV2(pair.second);
     return SizedBox(
       width: 50,
       height: 50,
@@ -115,15 +152,4 @@ extension ListExtension<T> on List<T> {
   }
 
   bool containsAllV2(Iterable<T> collection) => toSet().containsAll(collection);
-}
-
-@immutable
-class Pair<T> {
-  final T first;
-  final T second;
-
-  const Pair({
-    required this.first,
-    required this.second,
-  });
 }

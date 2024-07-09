@@ -1,7 +1,10 @@
 import 'package:devtools_app/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences_tools/shared_preferences_tools.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SharedPreferencesToolsDebug.init();
   runApp(const MyApp());
 }
 
