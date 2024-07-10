@@ -1,11 +1,15 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/src/foundation/diagnostics.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'models/pairs.dart';
 
 const _sharedPrefsKey = 'pairs_key';
+
+final _stopwatch = Stopwatch();
 
 class DataPreparing extends StatefulWidget {
   const DataPreparing({super.key});
@@ -18,10 +22,19 @@ class _DataPreparingState extends State<DataPreparing> {
   bool useFirstVariant = true;
   List<Pair<List<int>>> pairs = [];
 
+  late UserTag previous;
+
   @override
   void initState() {
     super.initState();
+    previous = UserTag('DataPreparing').makeCurrent();
     _setupPairs();
+  }
+
+  @override
+  dispose() {
+    previous.makeCurrent();
+    super.dispose();
   }
 
   Future<void> _setupPairs() async {
@@ -62,8 +75,12 @@ class _DataPreparingState extends State<DataPreparing> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        child: Text(useFirstVariant ? 'index' : 'set'),
+        child: Text(
+          useFirstVariant ? 'do by set' : 'do by index',
+          textAlign: TextAlign.center,
+        ),
         onPressed: () {
+          _stopwatch.reset();
           setState(() {
             useFirstVariant = !useFirstVariant;
           });
@@ -85,8 +102,6 @@ class _DataPreparingState extends State<DataPreparing> {
             );
           },
         ),
-        // ],
-        // ),
       ),
     );
   }
@@ -110,6 +125,23 @@ class _DataPreparingState extends State<DataPreparing> {
       (int index) => random.nextInt(max),
     );
   }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+
+    properties.add(
+      IntProperty('stopwatchCalc', _stopwatch.elapsedMicroseconds, unit: 'mcs'),
+    );
+    properties.add(
+      FlagProperty(
+        'stopwatchIsRunning',
+        value: _stopwatch.isRunning,
+        ifTrue: 'active',
+        ifFalse: 'inactive',
+      ),
+    );
+  }
 }
 
 class PairTile extends StatelessWidget {
@@ -122,23 +154,32 @@ class PairTile extends StatelessWidget {
     required this.useFirstVariant,
   });
 
+  bool calcContains() {
+    _stopwatch.start();
+    final result = useFirstVariant
+        ? pair.first.containsAllV1(pair.second)
+        : pair.first.containsAllV2(pair.second);
+    _stopwatch.stop();
+    return result;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final containsAll = useFirstVariant
-        ? pair.first.containsAll(pair.second)
-        : pair.first.containsAllV2(pair.second);
+    final containsAll = calcContains();
+    final containsColor = useFirstVariant ? Colors.green : Colors.lightBlue;
+    final notContainsColor = useFirstVariant ? Colors.red : Colors.deepPurple;
     return SizedBox(
       width: 50,
       height: 50,
       child: Placeholder(
-        color: containsAll ? Colors.green : Colors.red,
+        color: containsAll ? containsColor : notContainsColor,
       ),
     );
   }
 }
 
 extension ListExtension<T> on List<T> {
-  bool containsAll(Iterable<T> collection) {
+  bool containsAllV1(Iterable<T> collection) {
     if (collection.isEmpty) {
       return true;
     }
