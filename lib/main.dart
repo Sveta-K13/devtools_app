@@ -1,6 +1,7 @@
-import 'package:devtools_app/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences_tools/shared_preferences_tools.dart';
+
+import 'screens/home/home_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const HomePage(),
     );
   }
 }
