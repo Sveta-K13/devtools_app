@@ -1,10 +1,5 @@
 part of 'home_page.dart';
 
-final profileImg = Image.network(
-  'https://raw.githubusercontent.com/Sveta-K13/flutter_colors_demo/master/images/profile.png',
-  height: 80,
-);
-
 final meImg = Image.network(
   'https://raw.githubusercontent.com/Sveta-K13/flutter_colors_demo/master/images/me.jpg',
   height: 80,
